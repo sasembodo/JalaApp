@@ -7,14 +7,15 @@ import COLORS from '../config/color'
 
 export default function PricePage({navigation}) {
 
+    const [price, setPrice] = useState([]);
     const [size, setSize] = useState(100);
     const [region, setRegion] = useState({});
 
     return (
         <View style={styles.container}>
             <Text style={styles.txtTitle} >Harga Terbaru</Text>
-            <PriceList size={size} region={region}/>
-            <Filter size={size} setSize={setSize} region={region} setRegion={setRegion}/>
+            <PriceList price={price} setPrice={setPrice} size={size} region={region}/>
+            <Filter setPrice={setPrice} size={size} setSize={setSize} region={region} setRegion={setRegion}/>
         </View>
     )
 }

@@ -74,11 +74,12 @@ export default function DiseaseCard({}) {
     const convertDate = dateStr =>{
         let result = dateStr.split(" ")[0]
       
-          const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        const monthNames = [
+          "Januari", "Februari", "Maret", "April", "Mei", "Juni",
           "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
     
-          result = result.split("-")
+        result = result.split("-")
         result = `${result[2]} ${monthNames[parseInt(result[1])-1]} ${result[0]}`
         return result
     }

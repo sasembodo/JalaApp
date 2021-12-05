@@ -9,6 +9,7 @@ import COLORS from '../config/color'
 export default function Filter(props) {
 
     const {
+        setPrice,
         size,
         setSize,
         region,
@@ -60,7 +61,7 @@ export default function Filter(props) {
                 </View>
             </View>
             <SizeModal modalVisible={sizeModalVisible} setModalVisible={setSizeModalVisible} setSize={setSize}/>
-            <RegionModal modalVisible={regionModalVisible} setModalVisible={setRegionModalVisible} setRegion={setRegion}/>
+            <RegionModal modalVisible={regionModalVisible} setModalVisible={setRegionModalVisible} setPrice={setPrice} setRegion={setRegion}/>
         </View>
     )
 }

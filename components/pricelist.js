@@ -9,16 +9,20 @@ import COLORS from '../config/color';
 
 export default function PriceList(props) {
     const {
+        price,
+        setPrice,
         size,
         region
     } = props
-    const [price, setPrice] = useState([]);
+    
     const [isLoading, setIsLoading] = useState(false);
     const [pageCurrent, setPageCurrent] = useState(1);
     const navigation = useNavigation();
 
     const apiCall = async () =>{
+        setIsLoading(true)
         const url = apiConfig.baseURL + 'api/shrimp_prices?per_page=15&page=' + pageCurrent + '&with=region,creator&region_id=' + region.id
+        console.log(url)
         axios.get(url)   
         .then(response => {
             setPrice([...price, ...response.data.data]);
@@ -39,26 +43,44 @@ export default function PriceList(props) {
     }
 
     const handleLoadMore = () =>{
-        setPageCurrent(pageCurrent+1)
-        setIsLoading(true)
+        if(price.filter(p => p["size_"+size]).length > 2){
+            setPageCurrent(pageCurrent+1)
+        }
     }
 
+    useEffect(() => {
+        setPageCurrent(1)
+    }, [region])
+
     const loadingView = () =>{
-        return (
-            <View style={styles.loading}>
-                <ActivityIndicator size="large" color={COLORS.lBlue} />
-            </View>
-        )
+        if(isLoading){
+            return (
+                <View style={styles.loading}>
+                    <ActivityIndicator size="large" color={COLORS.lBlue} />
+                </View>
+            )
+        }else if(!price.filter(p => p["size_"+size]).length){
+            return (
+                <View>
+                    <Text style={styles.txtEmpty}>Supllier Tidak ditemukan</Text>
+                </View>
+            )
+        }else{
+            return (
+                <View></View>
+            )
+        }
     }
 
     const convertDate = dateStr =>{
         let result = dateStr.split(" ")[0]
       
-          const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        const monthNames = [
+          "Januari", "Februari", "Maret", "April", "Mei", "Juni",
           "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
     
-          result = result.split("-")
+        result = result.split("-")
         result = `${result[2]} ${monthNames[parseInt(result[1])-1]} ${result[0]}`
         return result
     }
@@ -69,7 +91,7 @@ export default function PriceList(props) {
 
     return (
         <View style={styles.container}>
-            {price.length ? (
+            {price.filter(p => p["size_"+size]).length ? (
                 <FlatList
                     data={price}
                     contentContainerStyle={{ paddingBottom:55}}
@@ -128,7 +150,7 @@ export default function PriceList(props) {
                 />
             ) : (
                 <View>
-                    {isLoading?loadingView():null}
+                    {loadingView()}
                 </View>
             )
         }
@@ -222,4 +244,9 @@ const styles = StyleSheet.create({
         fontSize:14,
         fontWeight:'600'
     },
+    txtEmpty:{
+        margin:50,
+        fontWeight: "bold",
+        textAlign: "center"
+    }
 })

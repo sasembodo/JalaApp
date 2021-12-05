@@ -13,6 +13,7 @@ export default function RegionModal (props) {
   const {
         modalVisible,
         setModalVisible,
+        setPrice,
         setRegion
     } = props
 
@@ -76,6 +77,7 @@ export default function RegionModal (props) {
                                 "id": item.id,
                                 "name": item.name
                             })
+                            setPrice([])
                             setModalVisible(!modalVisible)
                         }}>
                             <Text>
